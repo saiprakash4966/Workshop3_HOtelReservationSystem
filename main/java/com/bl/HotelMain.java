@@ -1,12 +1,15 @@
 package com.bl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class HotelMain 
 {
@@ -71,7 +74,7 @@ public class HotelMain
      */
     public void readUserInput(Scanner scanner) {
         System.out.println("Please select one option: ");
-        System.out.println("1. Add Hotel Details\n2. Print Hotel Information\n3. Print Cheapest Hotel");
+        System.out.println("1. Add Hotel Details\n2. Print Hotel Information\n3. Print Cheapest Hotel\n4. Add Rating to Hotel");
         int option = scanner.nextInt();
         switch (option) {
             case 1:
@@ -81,7 +84,10 @@ public class HotelMain
                 printHotelInformation();
                 break;
             case 3:
-                printCheapestHotel();
+                readDatesAndPrintCheapestHotels();
+                break;
+            case 4:
+                addRatingByTakingInputFromUser();
                 break;
             default:
                 System.out.println("Invalid option. Please select valid");
@@ -95,32 +101,32 @@ public class HotelMain
         hotelList.stream().forEach(System.out::println);
     }
 
+    public void readDatesAndPrintCheapestHotels() {
+        System.out.println("Enter date range");
+        String dateRange = scanner.next();
+        printCheapestHotel(dateRange);
+    }
+
     /**
      * Creating printCheapestHotel to print the cheapest hotel for the given date
      */
-    public void printCheapestHotel() {
-        System.out.println("Enter date range");
-        String dateRange = scanner.next();
-        double cheapHotelCost = 0.0;
-        Hotel cheapestHotel = null;
+    public List<Map.Entry<String, Double>> printCheapestHotel(String dateRange) {
         /**
-         * Using the split method to split the given date range by , deliminator
+         * create boolean list using dates which contains true if it is weekend, false otherwise
          */
-        for(String givenDate : dateRange.split(",")) {
-            if (this.isWeekend(givenDate)) {
-                //weekend
-                cheapestHotel = this.findCheapestHotel(true);
-                cheapHotelCost += cheapestHotel.getRegularWeekEndRate();
-            } else {
-                cheapestHotel = this.findCheapestHotel(false);
-                cheapHotelCost += cheapestHotel.getRegularWeekDayRate();
-            }
-        }
-        if (cheapestHotel != null) {
-            System.out.println("Cheapest hotel: " + cheapestHotel.getHotelName() + " and Total Cost: $" + cheapHotelCost);
-        } else {
-            System.out.println("Cheapest hotel not found!");
-        }
+        List<Boolean> dayTypeList = Arrays.stream(dateRange.split(",")).map(date -> isWeekend(date)).collect(Collectors.toList());
+
+        /**
+         * create a map using streams from available hotel list mapping hotel name as key and the total cost for given days as value
+         */
+        Map<String, Double> hotelMap = this.hotelList.stream().collect(Collectors.toMap(hotel -> hotel.getHotelName(), hotel -> dayTypeList.stream().map(dayType -> dayType ? hotel.getRegularWeekEndRate() : hotel.getRegularWeekDayRate()).reduce(Double::sum).get()));
+
+        /**
+         * print the cheapest hotel by comparing the cost of each hotel to min spend
+         */
+        List<Map.Entry<String, Double>> cheaphotels = hotelMap.entrySet().stream().filter(entrySet -> entrySet.getValue().doubleValue() == hotelMap.values().stream().min(Comparator.comparingDouble(Double::doubleValue)).get().doubleValue()).collect(Collectors.toList());
+        cheaphotels.stream().forEach(System.out::println);
+        return cheaphotels;
     }
 
     /**
@@ -142,10 +148,28 @@ public class HotelMain
     }
 
     /**
-     * Creating a findCheapestHotel to find the cheapest hotel by using stream method and comparator
-     * @return - the cheapest hotel
+     * This method willl take input from user and update the hotel rating
      */
-    public Hotel findCheapestHotel(boolean isWeekend) {
-        return this.hotelList.stream().min(Comparator.comparingDouble(isWeekend ? Hotel::getRegularWeekEndRate : Hotel::getRegularWeekDayRate)).get();
+    public void addRatingByTakingInputFromUser() {
+        System.out.println("Enter hotel name");
+        String hotelName = scanner.next();
+        System.out.println("Enter rating");
+        int rating = scanner.nextInt();
+        addRating(hotelName, rating);
+    }
+
+    /**
+     * This method will filter the hotels from hotel list based on given name and update its rating
+     * @param hotelName
+     * @param rating
+     */
+    public boolean addRating(String hotelName, int rating) {
+        List<Hotel> hotels = this.hotelList.stream().filter(hotel -> hotel.getHotelName().equalsIgnoreCase(hotelName)).collect(Collectors.toList());
+        if (hotels.isEmpty()) {
+            return false;
+        } else {
+            hotels.stream().forEach(hotel -> hotel.setRating(rating));
+            return true;
+        }
     }
 }
