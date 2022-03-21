@@ -20,7 +20,7 @@ public class Hotel
     private double regularWeekEndRate;
 
     /**
-     * Creating parameterized constructor
+     * Creating parameterised constructor
      * @param hotelName - name of the hotel
      * @param rating - hotel rating
      * @param regularWeekDayRate - rate of regular week day

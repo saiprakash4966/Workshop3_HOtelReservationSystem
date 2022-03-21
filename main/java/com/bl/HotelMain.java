@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class HotelMain 
@@ -24,7 +25,7 @@ public class HotelMain
     public static Scanner scanner = new Scanner(System.in);
 
     /**
-     * Main method to perform modification on HotelMain
+     * Main method to perform modification on Hotel Reservation System
      * @param args - default java param
      */
     public static void main(String[] args) {
@@ -74,7 +75,7 @@ public class HotelMain
      */
     public void readUserInput(Scanner scanner) {
         System.out.println("Please select one option: ");
-        System.out.println("1. Add Hotel Details\n2. Print Hotel Information\n3. Print Cheapest Hotel\n4. Add Rating to Hotel");
+        System.out.println("1. Add Hotel Details\n2. Print Hotel Information\n3. Print Cheapest Hotel\n4. Add Rating to Hotel\n5. Print Cheapest Best Rated Hotel");
         int option = scanner.nextInt();
         switch (option) {
             case 1:
@@ -89,6 +90,9 @@ public class HotelMain
             case 4:
                 addRatingByTakingInputFromUser();
                 break;
+            case 5:
+                readDatesAndPrintCheapestBestRatedHotels();
+                break;
             default:
                 System.out.println("Invalid option. Please select valid");
         }
@@ -102,8 +106,7 @@ public class HotelMain
     }
 
     public void readDatesAndPrintCheapestHotels() {
-        System.out.println("Enter date range");
-        String dateRange = scanner.next();
+        String dateRange = readDates();
         printCheapestHotel(dateRange);
     }
 
@@ -172,4 +175,37 @@ public class HotelMain
             return true;
         }
     }
+
+    /**
+     * Read date range from user
+     * @return date range
+     */
+    public String readDates() {
+        System.out.println("Enter date range");
+        return scanner.next();
+    }
+
+    /**
+     * This method reads date range from user and prints Cheapest best rated hotel
+     */
+    public void readDatesAndPrintCheapestBestRatedHotels() {
+        String dateRange = readDates();
+        findCheapestBestRatedHotel(dateRange);
+    }
+
+    /**
+     * This method will take daterange and prints cheapest best rated hotel
+     * @param dateRange
+     * @return cheapest best rated hotels
+     */
+    public Hotel findCheapestBestRatedHotel(String dateRange) {
+        List<Map.Entry<String, Double>> cheapestHotels = printCheapestHotel(dateRange);
+        Double cost = cheapestHotels.isEmpty() ? 0.0 : cheapestHotels.get(0).getValue();
+        Set<String> cheapestHotelNames = cheapestHotels.stream().map(entry -> entry.getKey()).collect(Collectors.toSet());
+        Hotel cheapestBestRatedHotel = this.hotelList.stream().filter(hotel -> cheapestHotelNames.contains(hotel.getHotelName())).max(Comparator.comparingInt(Hotel::getRating)).get();
+        System.out.println("Cheapest Best Rated hotel: "+cheapestBestRatedHotel.getHotelName()+", Total cost: $"+cost);
+        return cheapestBestRatedHotel;
+    }
+
+
 }
