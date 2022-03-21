@@ -16,28 +16,26 @@ public class Hotel
 {
     private int rating;
     private String hotelName;
-    private Map<Daytype, Integer> regularCustomerRatesMap = new HashMap<>();
+    private double regularWeekDayRate;
+    private double regularWeekEndRate;
 
     /**
-     * Creating parameterized constructor
+     * Creating parameterised constructor
      * @param hotelName - name of the hotel
      * @param rating - hotel rating
+     * @param regularWeekDayRate - rate of regular week day
+     * @param regularWeekEndRate - rate of regular weekend
      */
-    public Hotel(String hotelName, int rating) {
+    public Hotel(String hotelName, int rating, double regularWeekDayRate, double regularWeekEndRate) {
         this.rating = rating;
         this.hotelName = hotelName;
+        this.regularWeekDayRate = regularWeekDayRate;
+        this.regularWeekEndRate = regularWeekEndRate;
     }
 
     /**
-     * Creating getter and setter methods
+     * Creating getter and setter methods for all the instances of hotel class
      */
-    public void setRegularCustomerRatesMap(Map<Daytype, Integer> regularCustomerRatesMap) {
-        this.regularCustomerRatesMap = regularCustomerRatesMap;
-    }
-
-    public Map<Daytype, Integer> getRegularCustomerRatesMap() {
-        return regularCustomerRatesMap;
-    }
 
     public int getRating() {
         return rating;
@@ -55,15 +53,33 @@ public class Hotel
         this.hotelName = hotelName;
     }
 
+    public double getRegularWeekDayRate() {
+        return regularWeekDayRate;
+    }
+
+    public void setRegularWeekDayRate(double regularWeekDayRate) {
+        this.regularWeekDayRate = regularWeekDayRate;
+    }
+
+    public double getRegularWeekEndRate() {
+        return regularWeekEndRate;
+    }
+
+    public void setRegularWeekEndRate(double regularWeekEndRate) {
+        this.regularWeekEndRate = regularWeekEndRate;
+    }
+
+
     /**
      * Overriding toString method for printing the list in a format
      */
     @Override
     public String toString() {
         return "Hotel{" +
-                "rating=" + rating +
-                ", hotelName='" + hotelName + '\'' +
-                ", regularCustomerRatesMap=" + regularCustomerRatesMap +
+                "hotelName=" + hotelName +
+                ", rating='" + rating + '\'' +
+                ", regularWeekDayRate=$" + regularWeekDayRate +
+                ", regularWeekEndRate=$" + regularWeekEndRate +
                 '}';
     }
 }
