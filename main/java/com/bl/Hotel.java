@@ -9,7 +9,7 @@ import java.util.Map;
 }
 
 /**
- * Creating a Hotel Class which contains Hotal name and rating as instances
+ * Creating a Hotel Class which contains Hotel name and rating as instances
  */
 
 public class Hotel
@@ -20,7 +20,7 @@ public class Hotel
     private double regularWeekEndRate;
 
     /**
-     * Creating parameterised constructor
+     * Creating parameterized constructor
      * @param hotelName - name of the hotel
      * @param rating - hotel rating
      * @param regularWeekDayRate - rate of regular week day

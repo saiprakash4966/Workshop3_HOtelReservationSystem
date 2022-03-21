@@ -24,8 +24,7 @@ public class HotelMain
      * Main method to perform modification on HotelMain
      * @param args - default java param
      */
-    public static void main(String[] args) 
-    {
+    public static void main(String[] args) {
         /**
          * Printing a welcome message
          */
