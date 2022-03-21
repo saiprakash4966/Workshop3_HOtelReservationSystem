@@ -24,7 +24,7 @@ public class Hotel
      * @param hotelName - name of the hotel
      * @param rating - hotel rating
      * @param regularWeekDayRate - rate of regular week day
-     * @param regularWeekEndRate - rate of regular weekend
+     * @param regularWeekEndRate - rate of regular week end
      */
     public Hotel(String hotelName, int rating, double regularWeekDayRate, double regularWeekEndRate) {
         this.rating = rating;
