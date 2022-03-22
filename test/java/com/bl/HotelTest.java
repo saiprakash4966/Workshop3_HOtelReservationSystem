@@ -37,13 +37,14 @@ public class HotelTest
     }
 
     @Test
-    public void givenDates_whenWeekDayAndWeekEnd_ShouldReturnBestRatedAsBridgewood1() {
+    public void givenDates_whenWeekDayAndWeekEnd_ShouldReturnLakeWoodAndBridgewood() {
         hotelMain.hotelList.add(new Hotel("Lakewood", 3, 110.00, 90.00));
         hotelMain.hotelList.add(new Hotel("Bridgewood", 4, 150.00, 50.00));
-        Hotel cheapestBestRatedHotel = hotelMain.findCheapestBestRatedHotel("11Sep2020,12Sep2020", true);
-        Assert.assertEquals(cheapestBestRatedHotel.getHotelName(), "Bridgewood");
+        List<Map.Entry<String, Double>> result = hotelMain.printCheapestHotel("11Sep2020,12Sep2020", false);
+        Assert.assertEquals(result.size(), 2);
+        Assert.assertEquals(result.get(0).getKey(), "Bridgewood");
+        Assert.assertEquals(result.get(1).getKey(), "Lakewood");
     }
-
 
     @Test
     public void givenHotelAndRating_whenValidHotelName_ShouldReturnTrue() {
@@ -65,7 +66,7 @@ public class HotelTest
     public void givenDates_whenWeekDayAndWeekEnd_ShouldReturnBestRatedAsBridgewood() {
         hotelMain.hotelList.add(new Hotel("Lakewood", 3, 110.00, 90.00));
         hotelMain.hotelList.add(new Hotel("Bridgewood", 4, 150.00, 50.00));
-        Hotel cheapestBestRatedHotel = hotelMain.findCheapestBestRatedHotel("11Sep2020,12Sep2020", false);
+        Hotel cheapestBestRatedHotel = hotelMain.findCheapestBestRatedHotel("11Sep2020,12Sep2020", true);
         Assert.assertEquals(cheapestBestRatedHotel.getHotelName(), "Bridgewood");
     }
 
@@ -95,6 +96,7 @@ public class HotelTest
         boolean isSuccess = hotelMain.addRewardRates("ABC", 80.00, 80.00);
         Assert.assertEquals(isSuccess, false);
     }
+
     @Test
     public void givenDates_whenRewardedCustomerAndWeekDayAndWeekEnd_ShouldReturnRidgewood() {
         hotelMain.hotelList.add(new Hotel("Lakewood", 3, 110.00, 90.00));
@@ -105,5 +107,52 @@ public class HotelTest
         hotelMain.addRewardRates("Ridgewood", 100.00, 40.00);
         Hotel cheapestBestRatedHotel = hotelMain.findCheapestBestRatedHotel("11Sep2020,12Sep2020", false);
         Assert.assertEquals(cheapestBestRatedHotel.getHotelName(), "Ridgewood");
+    }
+    @Test
+    public void givenHotelName_WhenProper_ShouldReturnTrue() {
+        boolean result = HotelReservationValidation.isValidHotelName("Lakewood");
+        Assert.assertEquals(true, result);
+    }
+
+    @Test
+    public void givenHotelName_WhenNotProper_ShouldReturnFalse() {
+        boolean result = HotelReservationValidation.isValidHotelName("lakewood");
+        Assert.assertEquals(false, result);
+    }
+
+    @Test
+    public void givenHotelRating_WhenProper_ShouldReturnTrue() {
+        boolean result = HotelReservationValidation.isValidHotelRating(5);
+        Assert.assertEquals(true, result);
+    }
+
+    @Test
+    public void givenHotelRating_WhenNotProper_ShouldReturnFalse() {
+        boolean result = HotelReservationValidation.isValidHotelRating(578);
+        Assert.assertEquals(false, result);
+    }
+
+    @Test
+    public void givenHotelWeekDayRate_WhenProper_ShouldReturnTrue() {
+        boolean result = HotelReservationValidation.isValidWeekDayRate(110.0);
+        Assert.assertEquals(true, result);
+    }
+
+    @Test
+    public void givenHotelWeekDayRate_WhenNotProper_ShouldReturnFalse() {
+        boolean result = HotelReservationValidation.isValidWeekDayRate(000.0);
+        Assert.assertEquals(false, result);
+    }
+
+    @Test
+    public void givenHotelWeekEndRate_WhenProper_ShouldReturnTrue() {
+        boolean result = HotelReservationValidation.isValidWeekEndRate(1800.0);
+        Assert.assertEquals(true, result);
+    }
+
+    @Test
+    public void givenHotelWeekEndRate_WhenNotProper_ShouldReturnFalse() {
+        boolean result = HotelReservationValidation.isValidWeekEndRate(000.0);
+        Assert.assertEquals(false, result);
     }
 }

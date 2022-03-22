@@ -26,7 +26,7 @@ public class HotelMain
     public static Scanner scanner = new Scanner(System.in);
 
     /**
-     * Main method to perform modification on HotelMain
+     * Main method to perform modification on Hotel Reservation System
      * @param args - default java param
      */
     public static void main(String[] args) {
@@ -51,15 +51,20 @@ public class HotelMain
     public void readHotelDetails() {
         System.out.println("Please enter the Hotel Name: ");
         String hotelName = scanner.next();
+        System.out.println(HotelReservationValidation.isValidHotelName(hotelName) ? "Valid" : "InValid");
 
         System.out.println("Please enter the rating: ");
         int rating = scanner.nextInt();
+        System.out.println(HotelReservationValidation.isValidHotelRating(rating) ? "Valid" : "InValid");
 
         System.out.println("Please enter the weekday rate for regular customer: ");
         double weekDayRate = scanner.nextDouble();
+        System.out.println(HotelReservationValidation.isValidWeekDayRate(weekDayRate) ? "Valid" : "InValid");
 
         System.out.println("Please enter the weekend rate for regular customer: ");
         double weekEndRate = scanner.nextDouble();
+        System.out.println(HotelReservationValidation.isValidWeekEndRate(weekEndRate) ? "Valid" : "InValid");
+
         /**
          * Creating a Hotel object and adding all the details into hotelList
          */
@@ -69,6 +74,7 @@ public class HotelMain
     public boolean addHotel(Hotel hotel) {
         return this.hotelList.add(hotel);
     }
+
 
     /**
      * Creating readUserInput to read input from the user and continue according to it
@@ -174,8 +180,8 @@ public class HotelMain
 
     /**
      * This method will filter the hotels from hotel list based on given name and update its rating
-     * @param hotelName
-     * @param rating
+     * @param hotelName - name of the hotel
+     * @param rating - hotel rating
      */
     public boolean addRating(String hotelName, int rating) {
         List<Hotel> hotels = this.hotelList.stream().filter(hotel -> hotel.getHotelName().equalsIgnoreCase(hotelName)).collect(Collectors.toList());
@@ -246,7 +252,7 @@ public class HotelMain
      * @param hotelName
      * @param weekDayRate
      * @param weekendRate
-     * @return true if the add is success, false otherwise
+     * @return ture if the add is success, false otherwise
      */
     public boolean addRewardRates(String hotelName, double weekDayRate, double weekendRate) {
         Optional<Hotel> giveHotel = this.hotelList.stream().filter(hotel -> hotel.getHotelName().equalsIgnoreCase(hotelName)).findFirst();
