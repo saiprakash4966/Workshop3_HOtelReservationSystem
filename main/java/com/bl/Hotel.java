@@ -2,11 +2,7 @@ package com.bl;
 import java.util.HashMap;
 import java.util.Map;
 
-  enum Daytype 
-{
-    WEEKDAY,
-    WEEKEND
-}
+ 
 
 /**
  * Creating a Hotel Class which contains Hotel name and rating as instances

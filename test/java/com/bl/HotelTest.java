@@ -1,4 +1,5 @@
 package com.bl;
+import com.bl.HotelMain;
 
 import java.util.List;
 import java.util.Map;
@@ -10,7 +11,7 @@ import org.junit.Test;
 public class HotelTest
 {
 
-    HotelMain hotelMain = null;
+    HotelMain hotelMain= null;
 
     @Before
     public void init() {
@@ -46,7 +47,7 @@ public class HotelTest
     }
 
     @Test
-    public void givenHotelAndRating_whendValidHotelName_ShouldReturnTrue() {
+    public void givenHotelAndRating_whenValidHotelName_ShouldReturnTrue() {
         hotelMain.hotelList.add(new Hotel("Lakewood", 3, 110.00, 90.00));
         hotelMain.hotelList.add(new Hotel("Bridgewood", 4, 150.00, 50.00));
         boolean isUpdated = hotelMain.addRating("Lakewood", 4);
@@ -54,7 +55,7 @@ public class HotelTest
     }
 
     @Test
-    public void givenHotelAndRating_whendInValidHotelName_ShouldReturnFalse() {
+    public void givenHotelAndRating_whenInValidHotelName_ShouldReturnFalse() {
         hotelMain.hotelList.add(new Hotel("Lakewood", 3, 110.00, 90.00));
         hotelMain.hotelList.add(new Hotel("Bridgewood", 4, 150.00, 50.00));
         boolean isUpdated = hotelMain.addRating("UnKnownHotel", 4);
@@ -67,5 +68,14 @@ public class HotelTest
         hotelMain.hotelList.add(new Hotel("Bridgewood", 4, 150.00, 50.00));
         Hotel cheapestBestRatedHotel = hotelMain.findCheapestBestRatedHotel("11Sep2020,12Sep2020");
         Assert.assertEquals(cheapestBestRatedHotel.getHotelName(), "Bridgewood");
+    }
+
+    @Test
+    public void whenFindingBestRatedHotel_ShouldReturnRidgewood() {
+        hotelMain.hotelList.add(new Hotel("Lakewood", 3, 110.00, 90.00));
+        hotelMain.hotelList.add(new Hotel("Bridgewood", 4, 150.00, 50.00));
+        hotelMain.hotelList.add(new Hotel("Ridgewood", 5, 220.00, 150.00));
+        Hotel bestRatedHotel = hotelMain.findBestRatedHotel();
+        Assert.assertEquals(bestRatedHotel.getHotelName(), "Ridgewood");
     }
 }

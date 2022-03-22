@@ -25,7 +25,7 @@ public class HotelMain
     public static Scanner scanner = new Scanner(System.in);
 
     /**
-     * Main method to perform modification on Hotel Reservation System
+     * Main method to perform modification on HotelMain
      * @param args - default java param
      */
     public static void main(String[] args) {
@@ -75,7 +75,7 @@ public class HotelMain
      */
     public void readUserInput(Scanner scanner) {
         System.out.println("Please select one option: ");
-        System.out.println("1. Add Hotel Details\n2. Print Hotel Information\n3. Print Cheapest Hotel\n4. Add Rating to Hotel\n5. Print Cheapest Best Rated Hotel");
+        System.out.println("1. Add Hotel Details\n2. Print Hotel Information\n3. Print Cheapest Hotel\n4. Add Rating to Hotel\n5. Print Cheapest Best Rated Hotel\n6. Print Best Rated Hotel");
         int option = scanner.nextInt();
         switch (option) {
             case 1:
@@ -92,6 +92,9 @@ public class HotelMain
                 break;
             case 5:
                 readDatesAndPrintCheapestBestRatedHotels();
+                break;
+            case 6:
+                findBestRatedHotel();
                 break;
             default:
                 System.out.println("Invalid option. Please select valid");
@@ -207,5 +210,14 @@ public class HotelMain
         return cheapestBestRatedHotel;
     }
 
+    /**
+     * This method is created to find the best rated hotel from given no of hotels
+     * @return
+     */
+    public Hotel findBestRatedHotel() {
+        Hotel bestRatedHotel = this.hotelList.stream().max(Comparator.comparingInt(Hotel::getRating)).get();
+        System.out.println("Best Rated hotel: "+bestRatedHotel.getHotelName()+", cost: $"+bestRatedHotel.getRegularWeekDayRate() + bestRatedHotel.getRegularWeekEndRate());
+        return bestRatedHotel;
+    }
 
 }
