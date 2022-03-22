@@ -77,7 +77,7 @@ public class HotelMain
     public void readUserInput(Scanner scanner) {
         System.out.println("Please select one option: ");
         System.out.println("1. Add Hotel Details\n2. Print Hotel Information\n3. Print Cheapest Hotel\n4. Add Rating to Hotel\n5. Print Cheapest Best Rated Hotel\n6. Print Best Rated Hotel" +
-                "\n7. Add Reward Rates to a Hotel");
+                "\n7. Add Reward Rates to a Hotel\n8. Print Cheapest Best Rated Hotel For Rewarded Customer");
         int option = scanner.nextInt();
         switch (option) {
             case 1:
@@ -87,19 +87,22 @@ public class HotelMain
                 printHotelInformation();
                 break;
             case 3:
-                readDatesAndPrintCheapestHotels();
+                readDatesAndPrintCheapestHotels(true);
                 break;
             case 4:
                 addRatingByTakingInputFromUser();
                 break;
             case 5:
-                readDatesAndPrintCheapestBestRatedHotels();
+                readDatesAndPrintCheapestBestRatedHotels(true);
                 break;
             case 6:
                 findBestRatedHotel();
                 break;
             case 7:
                 readUserInputAndAddRewardRates();
+                break;
+            case 8:
+                readDatesAndPrintCheapestBestRatedHotels(false);
                 break;
             default:
                 System.out.println("Invalid option. Please select valid");
@@ -113,15 +116,15 @@ public class HotelMain
         hotelList.stream().forEach(System.out::println);
     }
 
-    public void readDatesAndPrintCheapestHotels() {
+    public void readDatesAndPrintCheapestHotels(boolean isRegularCustomer) {
         String dateRange = readDates();
-        printCheapestHotel(dateRange);
+        printCheapestHotel(dateRange, isRegularCustomer);
     }
 
     /**
      * Creating printCheapestHotel to print the cheapest hotel for the given date
      */
-    public List<Map.Entry<String, Double>> printCheapestHotel(String dateRange) {
+    public List<Map.Entry<String, Double>> printCheapestHotel(String dateRange, boolean isRegularCustomer) {
         /**
          * create boolean list using dates which contains true if it is weekend, false otherwise
          */
@@ -130,7 +133,7 @@ public class HotelMain
         /**
          * create a map using streams from available hotel list mapping hotel name as key and the total cost for given days as value
          */
-        Map<String, Double> hotelMap = this.hotelList.stream().collect(Collectors.toMap(hotel -> hotel.getHotelName(), hotel -> dayTypeList.stream().map(dayType -> dayType ? hotel.getRegularWeekEndRate() : hotel.getRegularWeekDayRate()).reduce(Double::sum).get()));
+        Map<String, Double> hotelMap = this.hotelList.stream().collect(Collectors.toMap(hotel -> hotel.getHotelName(), hotel -> dayTypeList.stream().map(dayType -> dayType ? (isRegularCustomer ? hotel.getRegularWeekEndRate() : hotel.getRewardWeekEndRate()) : (isRegularCustomer ? hotel.getRegularWeekDayRate() : hotel.getRewardWeekDayRate())).reduce(Double::sum).get()));
 
         /**
          * print the cheapest hotel by comparing the cost of each hotel to min spend
@@ -159,7 +162,7 @@ public class HotelMain
     }
 
     /**
-     * This method willl take input from user and update the hotel rating
+     * This method will take input from user and update the hotel rating
      */
     public void addRatingByTakingInputFromUser() {
         System.out.println("Enter hotel name");
@@ -196,9 +199,9 @@ public class HotelMain
     /**
      * This method reads date range from user and prints Cheapest best rated hotel
      */
-    public void readDatesAndPrintCheapestBestRatedHotels() {
+    public void readDatesAndPrintCheapestBestRatedHotels(boolean isRegularCustomer) {
         String dateRange = readDates();
-        findCheapestBestRatedHotel(dateRange);
+        findCheapestBestRatedHotel(dateRange, isRegularCustomer);
     }
 
     /**
@@ -206,8 +209,8 @@ public class HotelMain
      * @param dateRange
      * @return cheapest best rated hotels
      */
-    public Hotel findCheapestBestRatedHotel(String dateRange) {
-        List<Map.Entry<String, Double>> cheapestHotels = printCheapestHotel(dateRange);
+    public Hotel findCheapestBestRatedHotel(String dateRange, boolean isRegularCustomer) {
+        List<Map.Entry<String, Double>> cheapestHotels = printCheapestHotel(dateRange, isRegularCustomer);
         Double cost = cheapestHotels.isEmpty() ? 0.0 : cheapestHotels.get(0).getValue();
         Set<String> cheapestHotelNames = cheapestHotels.stream().map(entry -> entry.getKey()).collect(Collectors.toSet());
         Hotel cheapestBestRatedHotel = this.hotelList.stream().filter(hotel -> cheapestHotelNames.contains(hotel.getHotelName())).max(Comparator.comparingInt(Hotel::getRating)).get();
@@ -243,7 +246,7 @@ public class HotelMain
      * @param hotelName
      * @param weekDayRate
      * @param weekendRate
-     * @return ture if the add is success, false otherwise
+     * @return true if the add is success, false otherwise
      */
     public boolean addRewardRates(String hotelName, double weekDayRate, double weekendRate) {
         Optional<Hotel> giveHotel = this.hotelList.stream().filter(hotel -> hotel.getHotelName().equalsIgnoreCase(hotelName)).findFirst();

@@ -37,14 +37,13 @@ public class HotelTest
     }
 
     @Test
-    public void givenDates_whenWeekDayAndWeekEnd_ShouldReturnLakeWoodAndBridgewood() {
+    public void givenDates_whenWeekDayAndWeekEnd_ShouldReturnBestRatedAsBridgewood1() {
         hotelMain.hotelList.add(new Hotel("Lakewood", 3, 110.00, 90.00));
         hotelMain.hotelList.add(new Hotel("Bridgewood", 4, 150.00, 50.00));
-        List<Map.Entry<String, Double>> result = hotelMain.printCheapestHotel("11Sep2020,12Sep2020");
-        Assert.assertEquals(result.size(), 2);
-        Assert.assertEquals(result.get(0).getKey(), "Bridgewood");
-        Assert.assertEquals(result.get(1).getKey(), "Lakewood");
+        Hotel cheapestBestRatedHotel = hotelMain.findCheapestBestRatedHotel("11Sep2020,12Sep2020", true);
+        Assert.assertEquals(cheapestBestRatedHotel.getHotelName(), "Bridgewood");
     }
+
 
     @Test
     public void givenHotelAndRating_whenValidHotelName_ShouldReturnTrue() {
@@ -66,7 +65,7 @@ public class HotelTest
     public void givenDates_whenWeekDayAndWeekEnd_ShouldReturnBestRatedAsBridgewood() {
         hotelMain.hotelList.add(new Hotel("Lakewood", 3, 110.00, 90.00));
         hotelMain.hotelList.add(new Hotel("Bridgewood", 4, 150.00, 50.00));
-        Hotel cheapestBestRatedHotel = hotelMain.findCheapestBestRatedHotel("11Sep2020,12Sep2020");
+        Hotel cheapestBestRatedHotel = hotelMain.findCheapestBestRatedHotel("11Sep2020,12Sep2020", false);
         Assert.assertEquals(cheapestBestRatedHotel.getHotelName(), "Bridgewood");
     }
 
@@ -95,5 +94,16 @@ public class HotelTest
         hotelMain.hotelList.add(new Hotel("Ridgewood", 5, 220.00, 150.00));
         boolean isSuccess = hotelMain.addRewardRates("ABC", 80.00, 80.00);
         Assert.assertEquals(isSuccess, false);
+    }
+    @Test
+    public void givenDates_whenRewardedCustomerAndWeekDayAndWeekEnd_ShouldReturnRidgewood() {
+        hotelMain.hotelList.add(new Hotel("Lakewood", 3, 110.00, 90.00));
+        hotelMain.hotelList.add(new Hotel("Bridgewood", 4, 150.00, 50.00));
+        hotelMain.hotelList.add(new Hotel("Ridgewood", 5, 220.00, 150.00));
+        hotelMain.addRewardRates("Lakewood", 80.00, 80.00);
+        hotelMain.addRewardRates("Bridgewood", 110.00, 50.00);
+        hotelMain.addRewardRates("Ridgewood", 100.00, 40.00);
+        Hotel cheapestBestRatedHotel = hotelMain.findCheapestBestRatedHotel("11Sep2020,12Sep2020", false);
+        Assert.assertEquals(cheapestBestRatedHotel.getHotelName(), "Ridgewood");
     }
 }
