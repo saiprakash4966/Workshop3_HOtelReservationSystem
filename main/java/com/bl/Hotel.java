@@ -5,7 +5,8 @@ import java.util.Map;
  
 
 /**
- * Creating a Hotel Class which contains Hotel name and rating as instances
+ Creating a Hotel Class which contains Hotel name, rating, regularWeekDayRates, regularWeekEndRates
+ * as instance variables
  */
 
 public class Hotel
@@ -14,6 +15,8 @@ public class Hotel
     private String hotelName;
     private double regularWeekDayRate;
     private double regularWeekEndRate;
+    private double rewardWeekDayRate;
+    private double rewardWeekEndRate;
 
     /**
      * Creating parameterised constructor
@@ -65,6 +68,21 @@ public class Hotel
         this.regularWeekEndRate = regularWeekEndRate;
     }
 
+    public double getRewardWeekDayRate() {
+        return rewardWeekDayRate;
+    }
+
+    public void setRewardWeekDayRate(double rewardWeekDayRate) {
+        this.rewardWeekDayRate = rewardWeekDayRate;
+    }
+
+    public double getRewardWeekEndRate() {
+        return rewardWeekEndRate;
+    }
+
+    public void setRewardWeekEndRate(double rewardWeekEndRate) {
+        this.rewardWeekEndRate = rewardWeekEndRate;
+    }
 
     /**
      * Overriding toString method for printing the list in a format

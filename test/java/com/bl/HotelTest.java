@@ -11,7 +11,7 @@ import org.junit.Test;
 public class HotelTest
 {
 
-    HotelMain hotelMain= null;
+    HotelMain hotelMain = null;
 
     @Before
     public void init() {
@@ -77,5 +77,23 @@ public class HotelTest
         hotelMain.hotelList.add(new Hotel("Ridgewood", 5, 220.00, 150.00));
         Hotel bestRatedHotel = hotelMain.findBestRatedHotel();
         Assert.assertEquals(bestRatedHotel.getHotelName(), "Ridgewood");
+    }
+
+    @Test
+    public void givenHotel_whenHotelIsLakewood_ShouldReturnTrue() {
+        hotelMain.hotelList.add(new Hotel("Lakewood", 3, 110.00, 90.00));
+        hotelMain.hotelList.add(new Hotel("Bridgewood", 4, 150.00, 50.00));
+        hotelMain.hotelList.add(new Hotel("Ridgewood", 5, 220.00, 150.00));
+        boolean isSuccess = hotelMain.addRewardRates("Lakewood", 80.00, 80.00);
+        Assert.assertEquals(isSuccess, true);
+    }
+
+    @Test
+    public void givenHotel_whenHotelIsUnknown_ShouldReturnFalse() {
+        hotelMain.hotelList.add(new Hotel("Lakewood", 3, 110.00, 90.00));
+        hotelMain.hotelList.add(new Hotel("Bridgewood", 4, 150.00, 50.00));
+        hotelMain.hotelList.add(new Hotel("Ridgewood", 5, 220.00, 150.00));
+        boolean isSuccess = hotelMain.addRewardRates("ABC", 80.00, 80.00);
+        Assert.assertEquals(isSuccess, false);
     }
 }
